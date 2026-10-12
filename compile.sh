@@ -1,0 +1,1 @@
+gcc -fsanitize=address -g main.c -lncurses -o main
