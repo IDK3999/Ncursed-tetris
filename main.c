@@ -138,7 +138,7 @@ int player_lost(int board[][col_limit]){
 	return false;
 }
 
-int update(int board[][col_limit]){
+int loop(int board[][col_limit]){
 	int ch = 0;
 	int score = 0, total_lines = 0;
 	srand(time(NULL));
@@ -256,13 +256,13 @@ int main()
 	
 	make_board(board);
 
-	if (update(board)){
+	if (loop(board)){
 		mvprintw(line_offset, col_offset, "YOU LOST!!!");
 		mvprintw(line_offset + 1, col_offset, "Exiting...");
 	}
 	refresh();
 
-	napms(2000);   /* pause for 2000 milliseconds */
+	napms(500);   /* pause for 2000 milliseconds */
 
 	erase();
 	endwin();
