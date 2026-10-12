@@ -248,6 +248,7 @@ int main()
 	cbreak();				/* Line buffering disabled	*/
 	keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
 	noecho();			/* Don't echo() while we do getch */
+	system("mpv --no-terminal --no-video --loop Korobeiniki-wansti-tobefree.mp3 &");
 
 	int board[line_limit][col_limit] = {0};
 	initialize_board(board);
@@ -265,6 +266,6 @@ int main()
 
 	erase();
 	endwin();
-
+	system("pkill -f Korobeiniki-wansti-tobefree.mp3");
 	return 0;
 }
