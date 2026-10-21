@@ -8,9 +8,9 @@ suported extension and name it to Korobeiniki-wansti-tobefree.mp3"
 If your game crashes or you quit with ^C instead of 'q', you can
 stop the music with the following command:
 
-'''
+' ' '
 pkill -f Korobeiniki-wansti-tobefree.mp3
-'''
+' ' '
 
 Controls:
     Left arrow moves the piece left;
