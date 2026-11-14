@@ -27,7 +27,12 @@ void initialize_colours(){
 	init_pair(4, COLOR_GREEN, COLOR_BLACK); // S
 	init_pair(5, COLOR_RED, COLOR_BLACK); //Z
 	init_pair(6, COLOR_BLUE, COLOR_BLACK); //J
-	init_pair(7, 208, COLOR_BLACK); // L
+
+	if(COLORS >= 256) // if the terminal supports orange
+		init_pair(7, 208, COLOR_BLACK); // L
+	else
+	 	init_pair(7, COLOR_YELLOW, COLOR_BLACK); // sets the color to yellow 
+
 	init_pair(8, COLOR_WHITE, COLOR_BLACK); // board
 }
 
