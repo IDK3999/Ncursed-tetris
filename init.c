@@ -1,4 +1,8 @@
+#pragma once
+
 #include <ncurses.h>
+
+///#define limit 10 // 10 by 10 grid
 #define line_limit 21
 #define col_limit 12
 #define col_offset 4
