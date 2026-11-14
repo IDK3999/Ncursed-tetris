@@ -1,4 +1,6 @@
 #include <ncurses.h>
+#include <stdbool.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <locale.h>
@@ -17,10 +19,32 @@ long now_ms(void){ // i don't even know atp
 	return t.tv_sec * 1000 + t.tv_nsec / 1000000;
 }
 
+int highscore_get(){
+	FILE *f = fopen(".highscore.txt", "r");   /* "r" = read */
+
+	if(f == NULL)
+		f = fopen(".highscore.txt", "w");
+	int highscore = 0;
+	fscanf(f, "%d", &highscore);                   /* like scanf, from the file */
+	fclose(f);
+
+	return highscore;
+}
+
+void highscore_write(int score, int highscore){
+	if(score > highscore){
+		highscore = score;
+		FILE *f = fopen(".highscore.txt", "w");   /* "w" = write; creates the file, or empties it */
+		fprintf(f, "%d\n", score);                 /* like printf, into the file */
+		fclose(f);
+
+	}
+}
 
 int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 0 if the player quits
 	int ch = 0; // the pressed key
 	int score = 0, total_lines = 0;
+	int highscore = highscore_get();
 	srand(time(NULL));
 	int x_piece = col_limit / 2, y_piece = 0; // position of the current piece
 	int current_piece = rand() % 7; // the number of the current piece (see init.c for more info)
@@ -38,6 +62,7 @@ int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 
 		draw_piece(copy_current_piece, y_piece, x_piece, current_piece + 1); // draws the current piece
 		mvprintw(3, 40, "Lines: %d", total_lines); // outputs the amount of total cleared lines
 		mvprintw(4, 40, "Score: %d", score); // outputs the score
+		mvprintw(5, 40, "Highscore: %d", highscore); // outputs the higscore
 		refresh();
 		ch = getch();
 		switch (ch) {
@@ -105,7 +130,11 @@ int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 
 				last = 0; // locks piece
 				break;
 			case 'q':
+				highscore_write(score, highscore);
+				if(score > highscore)
+					highscore = score;
 				return false;
+				break;
 		}
 
 		if(now_ms() - last >= 500){ // lowers the piece or locks it
@@ -139,6 +168,10 @@ int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 
 						break;
 				}
 				counter = 0;
+
+				highscore_write(score, highscore);
+				if(score > highscore)
+					highscore = score;
 
 				if(player_lost(board)) // ends the game
 					return true;
