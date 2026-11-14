@@ -1,4 +1,5 @@
 #include <ncurses.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,7 +24,7 @@ int highscore_get(){
 	FILE *f = fopen(".highscore.txt", "r");   /* "r" = read */
 
 	if(f == NULL)
-		f = fopen(".highscore.txt", "w");
+		return 0;
 	int highscore = 0;
 	fscanf(f, "%d", &highscore);                   /* like scanf, from the file */
 	fclose(f);
@@ -33,7 +34,6 @@ int highscore_get(){
 
 void highscore_write(int score, int highscore){
 	if(score > highscore){
-		highscore = score;
 		FILE *f = fopen(".highscore.txt", "w");   /* "w" = write; creates the file, or empties it */
 		fprintf(f, "%d\n", score);                 /* like printf, into the file */
 		fclose(f);
@@ -197,6 +197,16 @@ int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 
 	return 0; //It shouldn't reach this...
 }
 
+void on_end(void){
+	endwin();
+	system("pkill -f Korobeiniki-wansti-tobefree.mp3"); // stops the music
+}
+
+void on_signal(int sig){ // note: this thing probably makes the program VERY unsafe
+	(void) sig;
+	exit(1);
+}
+
 int main()
 {
 	setlocale(LC_ALL, "");
@@ -208,6 +218,9 @@ int main()
 	cbreak();				/* Line buffering disabled	*/
 	keypad(stdscr, TRUE);		/* We get F1, F2 etc..		*/
 	noecho();			/* Don't echo() while we do getch */
+	signal(SIGINT, on_signal); // note: this thing probably makes the program VERY unsafe
+	signal(SIGTERM, on_signal); // note: this thing probably makes the program VERY unsafe
+	atexit(on_end);
 	system("mpv --no-terminal --no-video --loop Korobeiniki-wansti-tobefree.mp3 &"); // starts the music
 
 	int board[line_limit][col_limit] = {0}; // makes the board
@@ -223,7 +236,6 @@ int main()
 	napms(500);   /* pause for 500 milliseconds */
 
 	erase();
-	endwin();
-	system("pkill -f Korobeiniki-wansti-tobefree.mp3"); // stops the music
+	
 	return 0;
 }
