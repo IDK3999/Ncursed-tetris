@@ -1,6 +1,7 @@
 #pragma once
 
 #include <ncurses.h>
+#include <stdlib.h>
 #include "draw_operations.c"
 
 
@@ -66,4 +67,23 @@ void rotation(int tetrimino[][4], int tmp[][4], int n){ // Code taken from https
 	for (int j = 0; j < n; ++j)
 	        for (int i = 0; i < n; ++i)
 	            tmp[j][n - i - 1] = tetrimino[i][j];
+}
+
+int spawn_piece(int copy_current_piece[][4], int what_pieces[], int *x_piece, int *y_piece){
+	if(all_played(what_pieces)){
+		reset_played_pieces(what_pieces);
+	}
+
+	int current_piece;
+	do{
+		current_piece = rand() % 7; // picks a new, unpicked piece
+	}while(what_pieces[current_piece] != 0);
+	what_pieces[current_piece] ++;
+
+	*(x_piece) = col_limit / 2; // resets to top-middle
+	*(y_piece) = 0; // resets to top row
+
+	copy_tetrimino(pieces[current_piece], copy_current_piece);
+
+	return current_piece;
 }

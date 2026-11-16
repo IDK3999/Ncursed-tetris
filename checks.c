@@ -50,3 +50,12 @@ int landing_row(int board[][col_limit], int y, int x, int tetrimino[][4]){ // se
 	}
 	return y;
 }
+
+bool try_move(int board[][col_limit], int tetriminio[][4], int *y_piece, int *x_piece, int dy, int dx){
+	if(it_fits(board, tetriminio, *y_piece + dy, *x_piece + dx)){
+		*x_piece += dx;
+		*y_piece += dy;
+		return true;
+	}
+	return false;
+}

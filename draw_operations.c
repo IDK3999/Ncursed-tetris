@@ -2,11 +2,13 @@
 
 #include <ncurses.h>
 #include "checks.c"
+#include "init.c"
 
 void draw(int y, int x, int ch){ // draws 2 characters (ch) to the screen
 	mvaddch(y + line_offset, x * 2 + col_offset, ch);
 	mvaddch(y + line_offset, 2 * x + 1 + col_offset, ch);
 }
+
 
 void draw_piece(int tetrimino[][4], int y, int x, int current_piece){ // draws a piece to the screen
 
@@ -31,4 +33,11 @@ void cast_shadow(int board[][col_limit], int x, int y, int tetrimino[][4], int c
 			if(tetrimino[i][j] == 1)
 				draw_shadow(y + i, x + j, "░░", current_piece);
 	}
+}
+
+void draw_stats(const int total_lines, const int score, const int level, const int highscore){
+	mvprintw(3, 40, "Lines: %d", total_lines); // outputs the amount of total cleared lines
+	mvprintw(4, 40, "Score: %d", score); // outputs the score
+	mvprintw(5, 40, "Level: %d", level); // outputs the level
+	mvprintw(6, 40, "Highscore: %d", highscore); // outputs the higscore
 }
