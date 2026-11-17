@@ -1,4 +1,4 @@
 main
 error.txt
 .highscore.txt
-tetris.exe
+*.exe
