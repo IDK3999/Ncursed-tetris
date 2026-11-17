@@ -1,4 +1,10 @@
-#include <ncurses.h>
+
+#ifdef _WIN32
+	#include <curses.h>
+#else
+	#include <ncurses.h>
+#endif
+
 #include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
@@ -173,7 +179,9 @@ int loop(int board[][col_limit]){ // main game loop; return 1 if player lost or 
 
 void on_end(void){
 	endwin();
-	system("pkill -f Korobeiniki-wansti-tobefree.mp3"); // stops the music
+	#ifndef _WIN32 // y'all don't get music
+		system("pkill -f Korobeiniki-wansti-tobefree.mp3"); // stops the music
+	#endif
 }
 
 void on_signal(int sig){ // note: this thing probably makes the program VERY unsafe
@@ -195,7 +203,10 @@ int main()
 	signal(SIGINT, on_signal); // note: this thing probably makes the program VERY unsafe
 	signal(SIGTERM, on_signal); // note: this thing probably makes the program VERY unsafe
 	atexit(on_end);
-	system("mpv --no-terminal --no-video --loop Korobeiniki-wansti-tobefree.mp3 &"); // starts the music
+	
+	#ifndef _WIN32 // y'all don't get music
+		system("mpv --no-terminal --no-video --loop Korobeiniki-wansti-tobefree.mp3 &"); // starts the music
+	#endif
 
 	int board[line_limit][col_limit] = {0}; // makes the board
 	initialize_board(board);

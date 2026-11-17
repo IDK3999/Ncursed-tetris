@@ -1,6 +1,11 @@
 #pragma once
 
-#include <ncurses.h>
+#ifdef _WIN32
+	#include <curses.h>
+#else
+	#include <ncurses.h>
+#endif
+
 #include <stdlib.h>
 #include "draw_operations.c"
 

@@ -1,10 +1,15 @@
 #pragma once
 
-#include <ncurses.h>
+#ifdef _WIN32
+	#include <curses.h>
+#else
+	#include <ncurses.h>
+#endif
+
 #include "checks.c"
 #include "init.c"
 
-void draw(int y, int x, int ch){ // draws 2 characters (ch) to the screen
+void draw(int y, int x, chtype ch){ // draws 2 characters (ch) to the screen
 	mvaddch(y + line_offset, x * 2 + col_offset, ch);
 	mvaddch(y + line_offset, 2 * x + 1 + col_offset, ch);
 }

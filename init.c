@@ -1,6 +1,10 @@
 #pragma once
 
-#include <ncurses.h>
+#ifdef _WIN32
+	#include <curses.h>
+#else
+	#include <ncurses.h>
+#endif
 
 ///#define limit 10 // 10 by 10 grid
 #define line_limit 21
